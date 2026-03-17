@@ -1,0 +1,77 @@
+-- Create GUI
+local player = game.Players.LocalPlayer
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "TeleportGUI"
+screenGui.Parent = player.PlayerGui
+
+local frame = Instance.new("Frame")
+frame.Size = UDim2.new(0, 400, 0, 200)
+frame.Position = UDim2.new(0.5, -200, 0.5, -100)
+frame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+frame.BackgroundTransparency = 0.5
+frame.Parent = screenGui
+
+local titleLabel = Instance.new("TextLabel")
+titleLabel.Size = UDim2.new(0, 400, 0, 50)
+titleLabel.Position = UDim2.new(0, 0, 0, 0)
+titleLabel.Text = "Teleport to Candy Egg"
+titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+titleLabel.TextScaled = true
+titleLabel.BackgroundTransparency = 1
+titleLabel.Parent = frame
+
+local teleportButton = Instance.new("TextButton")
+teleportButton.Size = UDim2.new(0, 200, 0, 50)
+teleportButton.Position = UDim2.new(0.5, -100, 0.5, 25)
+teleportButton.Text = "Teleport"
+teleportButton.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+teleportButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+teleportButton.TextScaled = true
+teleportButton.Parent = frame
+
+-- Function to teleport and collect the egg
+local function teleportAndCollect()
+    -- Find the "CandyEgg" object in the workspace
+    local candyEgg = workspace:FindFirstChild("CandyEgg") -- The object "CandyEgg" should be in the workspace
+    if candyEgg then
+        -- Teleport the player to the candy egg
+        player.Character.HumanoidRootPart.CFrame = candyEgg.CFrame
+        -- Add a visual effect, e.g., sparkle
+        local sparkles = Instance.new("ParticleEmitter")
+        sparkles.Parent = candyEgg
+        sparkles.Enabled = true
+        wait(1)  -- Activate effect for 1 second
+        sparkles.Enabled = false
+
+        -- Logic for collecting the egg
+        candyEgg:Destroy()  -- Destroy the egg after it is collected
+        print(player.Name .. " collected Candy Egg!") -- Output message to the console
+    else
+        -- If the egg is not found, display a warning
+        print("Candy Egg not found in the game!")
+    end
+end
+
+-- Button click handler
+teleportButton.MouseButton1Click:Connect(function()
+    teleportAndCollect()
+end)
+
+-- Activate the GUI only when the player clicks the activation button
+local activationButton = Instance.new("TextButton")
+activationButton.Size = UDim2.new(0, 200, 0, 50)
+activationButton.Position = UDim2.new(0.5, -100, 0.7, 25)
+activationButton.Text = "Activate GUI"
+activationButton.BackgroundColor3 = Color3.fromRGB(255, 255, 0)
+activationButton.TextColor3 = Color3.fromRGB(0, 0, 0)
+activationButton.TextScaled = true
+activationButton.Parent = screenGui
+
+-- Activation button handler
+activationButton.MouseButton1Click:Connect(function()
+    screenGui.Enabled = true
+    activationButton.Visible = false
+end)
+
+-- Initially hide the GUI
+screenGui.Enabled = false

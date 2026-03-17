@@ -4,15 +4,27 @@ local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "TeleportGUI"
 screenGui.Parent = player.PlayerGui
 
+-- Кнопка активации
+local activationButton = Instance.new("TextButton")
+activationButton.Size = UDim2.new(0, 200, 0, 50)
+activationButton.Position = UDim2.new(0.5, -100, 0.5, -25)
+activationButton.Text = "Activate GUI"
+activationButton.BackgroundColor3 = Color3.fromRGB(255, 255, 0)
+activationButton.TextColor3 = Color3.fromRGB(0, 0, 0)
+activationButton.TextScaled = true
+activationButton.Parent = screenGui
+
+-- Основной фрейм GUI
 local frame = Instance.new("Frame")
 frame.Size = UDim2.new(0, 400, 0, 200)
 frame.Position = UDim2.new(0.5, -200, 0.5, -100)
 frame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 frame.BackgroundTransparency = 0.5
+frame.Visible = false
 frame.Parent = screenGui
 
 local titleLabel = Instance.new("TextLabel")
-titleLabel.Size = UDim2.new(0, 400, 0, 50)
+titleLabel.Size = UDim2.new(1, 0, 0, 50)
 titleLabel.Position = UDim2.new(0, 0, 0, 0)
 titleLabel.Text = "Teleport to Candy Egg"
 titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -29,45 +41,17 @@ teleportButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 teleportButton.TextScaled = true
 teleportButton.Parent = frame
 
--- Функция для телепортации игрока к Candy Egg
+-- Телепортация
 local function teleportToCandyEgg()
-    -- Ищем объект "CandyEgg" в рабочем пространстве
-    local candyEgg = workspace:FindFirstChild("CandyEgg")  -- Убедитесь, что объект есть в игре
-
-    if candyEgg then
-        -- Телепортируем игрока к объекту
-        if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
-            player.Character.HumanoidRootPart.CFrame = candyEgg.CFrame
-            print(player.Name .. " был телепортирован к Candy Egg")
-        else
-            print("Ошибка: HumanoidRootPart не найден!")
-        end
-    else
-        -- Если объекта не найдено
-        print("Candy Egg не найдено в игре!")
+    local candyEgg = workspace:FindFirstChild("CandyEgg")
+    if candyEgg and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+        player.Character.HumanoidRootPart.CFrame = candyEgg.CFrame
     end
 end
+teleportButton.MouseButton1Click:Connect(teleportToCandyEgg)
 
--- Обработчик нажатия на кнопку
-teleportButton.MouseButton1Click:Connect(function()
-    teleportToCandyEgg()  -- Вызываем функцию телепортации
-end)
-
--- Активируем GUI, когда игрок нажмет кнопку
-local activationButton = Instance.new("TextButton")
-activationButton.Size = UDim2.new(0, 200, 0, 50)
-activationButton.Position = UDim2.new(0.5, -100, 0.7, 25)
-activationButton.Text = "Activate GUI"
-activationButton.BackgroundColor3 = Color3.fromRGB(255, 255, 0)
-activationButton.TextColor3 = Color3.fromRGB(0, 0, 0)
-activationButton.TextScaled = true
-activationButton.Parent = screenGui
-
--- Когда нажимается кнопка активации, появляется интерфейс
+-- Активировать GUI
 activationButton.MouseButton1Click:Connect(function()
-    screenGui.Enabled = true  -- Показываем GUI
-    activationButton.Visible = false  -- Скрываем кнопку активации
+    frame.Visible = true
+    activationButton:Destroy()
 end)
-
--- Сначала скрываем GUI, пока не нажмут кнопку активации
-screenGui.Enabled = false

@@ -1,4 +1,4 @@
--- Create GUI
+-- Создание GUI
 local player = game.Players.LocalPlayer
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "TeleportGUI"
@@ -29,35 +29,27 @@ teleportButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 teleportButton.TextScaled = true
 teleportButton.Parent = frame
 
--- Function to teleport and collect the egg
-local function teleportAndCollect()
-    -- Find the "CandyEgg" object in the workspace
-    local candyEgg = workspace:FindFirstChild("CandyEgg") -- The object "CandyEgg" should be in the workspace
-    if candyEgg then
-        -- Teleport the player to the candy egg
-        player.Character.HumanoidRootPart.CFrame = candyEgg.CFrame
-        -- Add a visual effect, e.g., sparkle
-        local sparkles = Instance.new("ParticleEmitter")
-        sparkles.Parent = candyEgg
-        sparkles.Enabled = true
-        wait(1)  -- Activate effect for 1 second
-        sparkles.Enabled = false
+-- Функция для телепортации игрока к Candy Egg
+local function teleportToCandyEgg()
+    -- Ищем объект "CandyEgg" в рабочем пространстве
+    local candyEgg = workspace:FindFirstChild("CandyEgg")  -- Убедитесь, что объект есть в игре
 
-        -- Logic for collecting the egg
-        candyEgg:Destroy()  -- Destroy the egg after it is collected
-        print(player.Name .. " collected Candy Egg!") -- Output message to the console
+    if candyEgg then
+        -- Телепортируем игрока к объекту
+        player.Character.HumanoidRootPart.CFrame = candyEgg.CFrame
+        print(player.Name .. " был телепортирован к Candy Egg")
     else
-        -- If the egg is not found, display a warning
-        print("Candy Egg not found in the game!")
+        -- Если объекта не найдено
+        print("Candy Egg не найдено в игре!")
     end
 end
 
--- Button click handler
+-- Обработчик нажатия на кнопку
 teleportButton.MouseButton1Click:Connect(function()
-    teleportAndCollect()
+    teleportToCandyEgg()  -- Вызываем функцию телепортации
 end)
 
--- Activate the GUI only when the player clicks the activation button
+-- Активируем GUI, когда игрок нажмет кнопку
 local activationButton = Instance.new("TextButton")
 activationButton.Size = UDim2.new(0, 200, 0, 50)
 activationButton.Position = UDim2.new(0.5, -100, 0.7, 25)
@@ -67,11 +59,11 @@ activationButton.TextColor3 = Color3.fromRGB(0, 0, 0)
 activationButton.TextScaled = true
 activationButton.Parent = screenGui
 
--- Activation button handler
+-- Когда нажимается кнопка активации, появляется интерфейс
 activationButton.MouseButton1Click:Connect(function()
-    screenGui.Enabled = true
-    activationButton.Visible = false
+    screenGui.Enabled = true  -- Показываем GUI
+    activationButton.Visible = false  -- Скрываем кнопку активации
 end)
 
--- Initially hide the GUI
+-- Сначала скрываем GUI, пока не нажмут кнопку активации
 screenGui.Enabled = false
